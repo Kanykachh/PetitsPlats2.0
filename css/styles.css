@@ -3,7 +3,10 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
+    
+  }
+  .bg-light {
+    background-color: rgba(237, 237, 237, 1) !important;
   }
   
   .container {
@@ -135,6 +138,28 @@ body {
     border-radius: 5px;
     background-color: white;
   }
+
+  .filter-buttons {
+    gap: 3rem;
+    justify-content: flex-start !important;
+  }
+  .filters-section {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+   
+
+  }
+  
+  #recipe-count {
+    margin-left: auto; 
+    text-align: right; 
+    font-family: 'Anton', sans-serif;
+    font-size: 1.4rem;
+  }
+  
+
+
   
   /* Style des cartes de recettes */
   .recipes {

@@ -1,14 +1,15 @@
 import { createElement } from './factory.js';
 import { tags } from '../data/tags.js';
+import { filterRecipes, activeTags } from './renderRecipes.js';
 
 export function setupFilterSearch(type) {
     const searchInput = document.querySelector(`#${type}DropdownSearch`);
     const dropdownMenu = document.querySelector(`#${type}DropdownMenu`);
 
-    // Affiche tous les tags initiaux au chargement
+   
     updateDropdownMenu(type, tags[type], dropdownMenu);
 
-    // Ajoute un gestionnaire d'événement pour la recherche
+   
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
 
@@ -19,7 +20,7 @@ export function setupFilterSearch(type) {
 }
 
 function updateDropdownMenu(type, items, dropdownMenu) {
-    dropdownMenu.innerHTML = ''; // Vide le menu
+    dropdownMenu.innerHTML = ''; 
 
     items.forEach(item => {
         const listItem = createElement('li', {}, [
@@ -28,7 +29,7 @@ function updateDropdownMenu(type, items, dropdownMenu) {
             ]),
         ]);
 
-        // Ajoute un événement au clic pour gérer la sélection
+       
         listItem.addEventListener('click', () => {
             handleTagSelection(type, item);
         });
@@ -38,5 +39,31 @@ function updateDropdownMenu(type, items, dropdownMenu) {
 }
 
 function handleTagSelection(type, value) {
-    console.log(`${value} sélectionné dans ${type}`);
+    if (!activeTags[type].includes(value)) {
+        activeTags[type].push(value);
+
+        addTag(type, value);
+        filterRecipes();
+    }
+}
+
+function addTag(type, value) {
+    const tagContainer = document.querySelector('.tag-container');
+
+    const tag = createElement('span', { class: 'badge bg-warning text-dark me-2' }, [
+        document.createTextNode(value),
+        createElement('button', { class: 'btn-close ms-2', 'aria-label': 'Remove' }, [])
+    ]);
+
+    tag.querySelector('.btn-close').addEventListener('click', () => {
+        removeTag(type, value, tag);
+    });
+
+    tagContainer.appendChild(tag);
+}
+
+function removeTag(type, value, tagElement) {
+    activeTags[type] = activeTags[type].filter(tag => tag !== value);
+    tagElement.remove();
+    filterRecipes();
 }

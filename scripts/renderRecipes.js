@@ -5,44 +5,67 @@ import { recipes } from '../data/recipes.js';
 
 let activeTags = { ingredients: [], appliances: [], utensils: [] };
 
-
 function updateRecipeCount(count) {
     const recipeCountElement = document.getElementById('recipe-count');
     recipeCountElement.textContent = `${count} recette${count > 1 ? 's' : ''}`;
 }
 
-function createRecipeCard(recipe) {
-    const ingredientsList = recipe.ingredients.map(ingredient => {
-        return createElement('li', {}, [
-            document.createTextNode(`${ingredient.ingredient}${ingredient.quantity ? ': ' + ingredient.quantity : ''}${ingredient.unit ? ' ' + ingredient.unit : ''}`)
-        ]);
-    });
 
-    const card = createElement('div', { class: 'col-md-4 mb-4' }, [
+function createIngredientsList(ingredients) {
+    const ingredientsContainer = createElement('ul', { class: 'list-unstyled' });
+    ingredients.forEach(ing => {
+        const ingredientItem = createElement('li', {});
+        const ingredientName = createElement('span', { class: 'ingredient-item' }, [document.createTextNode(ing.ingredient)]);
+        ingredientItem.appendChild(ingredientName);
+        if (ing.quantity) {
+            ingredientItem.appendChild(document.createElement('br'));
+            const quantitySpan = createElement('span', { class: 'quantity-unit' }, [document.createTextNode(ing.quantity)]);
+            ingredientItem.appendChild(quantitySpan);
+        }
+        if (ing.unit) {
+            ingredientItem.appendChild(document.createTextNode(' '));
+            const unitSpan = createElement('span', { class: 'quantity-unit' }, [document.createTextNode(ing.unit)]);
+            ingredientItem.appendChild(unitSpan);
+        }
+        ingredientsContainer.appendChild(ingredientItem);
+    });
+    return ingredientsContainer;
+}
+
+
+function createRecipeCard(recipe) {
+    return createElement('div', { class: 'col-md-4 mb-4' }, [
         createElement('div', { class: 'card' }, [
             createElement('img', { src: `../assets/jsonrecipes/${recipe.image}`, alt: recipe.name, class: 'card-img-top' }, []),
             createElement('div', { class: 'card-body' }, [
                 createElement('h5', { class: 'card-title' }, [document.createTextNode(recipe.name)]),
-                createElement('p', { class: 'card-text' }, [document.createTextNode(recipe.description)]),
-                createElement('ul', { class: 'list-unstyled' }, ingredientsList)
+                createElement('div', { class: 'recipe-section' }, [
+                    createElement('h6', { class: 'section-title' }, [document.createTextNode('Recette')]),
+                    createElement('p', { class: 'recipe-description' }, [document.createTextNode(recipe.description)])
+                ]),
+                createElement('div', { class: 'ingredients-section' }, [
+                    createElement('h6', { class: 'section-title' }, [document.createTextNode('Ingrédients')]),
+                    createIngredientsList(recipe.ingredients)
+                ])
             ]),
             createElement('span', { class: 'time-badge' }, [document.createTextNode(`${recipe.time} min`)]),
         ])
     ]);
-
-    return card;
 }
+
 
 function displayRecipes(recipesList) {
     const recipesContainer = document.getElementById('recipes-container');
     recipesContainer.innerHTML = ''; 
+
     recipesList.forEach(recipe => {
-        const recipeCard = createRecipeCard(recipe);
-        recipesContainer.appendChild(recipeCard);
+        recipesContainer.appendChild(createRecipeCard(recipe));
     });
-    updateFilters(recipesList); 
+
+    updateFilters(recipesList);
     updateRecipeCount(recipesList.length); 
 }
+
 
 function updateFilters(recipesList) {
     const ingredientsSet = new Set();
@@ -64,26 +87,26 @@ function updateFilters(recipesList) {
     setupFilterSearch('utensils');
 }
 
+/*  
+--------------------------------------------------------
+🔵 MÉTHODE 1 : Version avec boucles classiques
+--------------------------------------------------------
+*/
 function filterRecipes() {
     const searchQuery = document.getElementById('main-search').value.toLowerCase();
 
     const filteredRecipes = recipes.filter(recipe => {
         const matchesSearch =
-            searchQuery.length < 3 || // Ignore search if fewer than 3 characters
+            searchQuery.length < 3 ||
             recipe.name.toLowerCase().includes(searchQuery) ||
             recipe.description.toLowerCase().includes(searchQuery) ||
             recipe.ingredients.some(ing => ing.ingredient.toLowerCase().includes(searchQuery));
 
         const matchesTags = Object.entries(activeTags).every(([type, tags]) => {
             if (tags.length === 0) return true;
-
-            if (type === 'ingredients') {
-                return tags.every(tag => recipe.ingredients.some(ing => ing.ingredient.toLowerCase() === tag));
-            } else if (type === 'appliances') {
-                return tags.every(tag => recipe.appliance.toLowerCase() === tag);
-            } else if (type === 'utensils') {
-                return tags.every(tag => recipe.ustensils.some(ut => ut.toLowerCase() === tag));
-            }
+            if (type === 'ingredients') return tags.every(tag => recipe.ingredients.some(ing => ing.ingredient.toLowerCase() === tag));
+            if (type === 'appliances') return tags.every(tag => recipe.appliance.toLowerCase() === tag);
+            if (type === 'utensils') return tags.every(tag => recipe.ustensils.some(ut => ut.toLowerCase() === tag));
             return true;
         });
 
@@ -97,26 +120,52 @@ function filterRecipes() {
     }
 }
 
+/*  
+--------------------------------------------------------
+🔴 MÉTHODE 2 
+--------------------------------------------------------
+*/
+function filterRecipesFunctional() {
+    const searchQuery = document.getElementById('main-search').value.toLowerCase();
+
+    const filteredRecipes = recipes
+        .map(recipe => ({
+            ...recipe,
+            ingredientsText: recipe.ingredients.map(ing => ing.ingredient.toLowerCase()).join(' ')
+        })) // 🔹 Transforme les recettes pour inclure un texte contenant tous les ingrédients
+        .filter(recipe => 
+            searchQuery.length < 3 ||
+            recipe.name.toLowerCase().includes(searchQuery) ||
+            recipe.description.toLowerCase().includes(searchQuery) ||
+            recipe.ingredientsText.includes(searchQuery)
+        ); // 🔹 Filtre les recettes avec `filter()`
+
+    displayRecipes(filteredRecipes);
+}
+
+// 🔄 CHOISIR QUELLE MÉTHODE UTILISER
+function applySearch() {
+    const useFunctionalMethod = true; // ⬅ Change à `false` pour tester la première méthode
+    if (useFunctionalMethod) {
+        filterRecipesFunctional();
+    } else {
+        filterRecipes();
+    }
+}
 
 function setupMainSearch() {
     const searchInput = document.getElementById('main-search');
     const searchButton = document.querySelector('.search-button');
 
-    searchInput.addEventListener('input', () => {
-        filterRecipes();
-    });
-
- 
-    searchButton.addEventListener('click', () => {
-        filterRecipes();
-    });
+    searchInput.addEventListener('input', applySearch);
+    searchButton.addEventListener('click', applySearch);
 }
 
 
 function init() {
-    setupMainSearch(); 
+    setupMainSearch();
     displayRecipes(recipes); 
 }
 
-export { filterRecipes, activeTags };
+export { filterRecipes, filterRecipesFunctional, activeTags };
 init();

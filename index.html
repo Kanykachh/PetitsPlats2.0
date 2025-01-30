@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -23,7 +22,7 @@
           id="main-search" 
           class="form-control search-input" 
           placeholder="Rechercher une recette, un ingrédient, ..." 
-        />
+        >
         <button class="btn search-button position-absolute" type="button">
           <i class="bi bi-search"></i> 
         </button>
@@ -34,8 +33,10 @@
   <main class="container my-3">
    
     <section class="filters-section mb-4">
-      <h2 id="recipe-count" class="text-end"></h2>
+      <h2 id="recipe-count" class="text-end">0 recette</h2>
       <div class="d-flex justify-content-start filter-buttons">
+
+        <!-- 🔹 FILTRE INGRÉDIENTS -->
         <div class="dropdown me-3 custom-height">
           <button class="btn btn-light dropdown-toggle custom-button" type="button" id="ingredientsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             Ingrédients
@@ -44,34 +45,44 @@
             <li>
               <input type="text" id="ingredientsDropdownSearch" class="form-control dropdown-search with-icon">
             </li>
-            <ul id="ingredientsDropdownMenu" class="custom-dropdown-menu"></ul>
+            <li>
+              <ul id="ingredientsDropdownMenu" class="custom-dropdown-menu"></ul>
+            </li>
           </ul>
         </div>
+
+        <!-- 🔹 FILTRE APPAREILS -->
         <div class="dropdown me-3 custom-height">
-          <button class="btn btn-light  dropdown-toggle custom-button" type="button" id="appliancesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <button class="btn btn-light dropdown-toggle custom-button" type="button" id="appliancesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             Appareils
           </button>
           <ul class="dropdown-menu" aria-labelledby="appliancesDropdown">
             <li>
               <input type="text" id="appliancesDropdownSearch" class="form-control dropdown-search with-icon">
             </li>
-            <ul id="appliancesDropdownMenu" class="custom-dropdown-menu"></ul>
+            <li>
+              <ul id="appliancesDropdownMenu" class="custom-dropdown-menu"></ul>
+            </li>
           </ul>
         </div>
+
+        <!-- 🔹 FILTRE USTENSILES -->
         <div class="dropdown me-3 custom-height">
-          <button class="btn btn-light  dropdown-toggle custom-button" type="button" id="utensilsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <button class="btn btn-light dropdown-toggle custom-button" type="button" id="utensilsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             Ustensiles
           </button>
           <ul class="dropdown-menu" aria-labelledby="utensilsDropdown">
             <li>
               <input type="text" id="utensilsDropdownSearch" class="form-control dropdown-search with-icon">
             </li>
-            <ul id="utensilsDropdownMenu" class="custom-dropdown-menu"></ul>
+            <li>
+              <ul id="utensilsDropdownMenu" class="custom-dropdown-menu"></ul>
+            </li>
           </ul>
         </div>
+
       </div>
     </section>
-    
 
     <div class="tag-container mb-4"></div>
 

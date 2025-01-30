@@ -1,0 +1,11 @@
+# 📌 Node.js dependencies
+node_modules/
+package-lock.json
+
+# 📌 Cache ESLint
+.eslintcache
+
+# 📌 Fichiers système (macOS, Windows, logs)
+.DS_Store
+Thumbs.db
+*.log

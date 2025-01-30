@@ -34,7 +34,7 @@ function createIngredientsList(ingredients) {
 function createRecipeCard(recipe) {
     return createElement('div', { class: 'col-md-4 mb-4' }, [
         createElement('div', { class: 'card' }, [
-            createElement('img', { src: `../assets/jsonrecipes/${recipe.image}`, alt: recipe.name, class: 'card-img-top' }, []),
+            createElement('img', { src: `./assets/jsonrecipes/${recipe.image}`, alt: recipe.name, class: 'card-img-top' }, []),
             createElement('div', { class: 'card-body' }, [
                 createElement('h5', { class: 'card-title' }, [document.createTextNode(recipe.name)]),
                 createElement('div', { class: 'recipe-section' }, [

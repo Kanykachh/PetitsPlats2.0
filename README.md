@@ -1,5 +1,13 @@
 📌 Les Petits Plats - Documentation Back-End
 
+## 🚀 Utilisation locale
+
+Si vous clonez ce projet en local, **supprimez la balise `<base>`** dans `index.html` pour éviter les problèmes de chargement des fichiers CSS et JavaScript :
+
+```html
+<!-- Supprimez cette ligne en local -->
+<base href="https://kanykachh.github.io/PetitsPlats2.0/" />
+
 🔍 Présentation
 
 Ce projet est une refonte du moteur de recherche de "Les Petits Plats", un site de recettes de cuisine. L’objectif était d’optimiser la recherche et le filtrage des recettes pour une meilleure expérience utilisateur.

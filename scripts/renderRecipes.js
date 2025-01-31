@@ -145,7 +145,7 @@ function filterRecipesFunctional() {
 
 // 🔄 CHOISIR QUELLE MÉTHODE UTILISER
 function applySearch() {
-    const useFunctionalMethod = true; // ⬅ Change à `false` pour tester la première méthode
+    const useFunctionalMethod = false; // ⬅ Change à `false` pour tester la première méthode
     if (useFunctionalMethod) {
         filterRecipesFunctional();
     } else {

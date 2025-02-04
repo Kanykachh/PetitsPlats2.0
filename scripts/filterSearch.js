@@ -1,6 +1,6 @@
 import { createElement } from './factory.js';
 import { tags } from '../data/tags.js';
-import { filterRecipes, activeTags } from './renderRecipes.js';
+import { filterRecipesWithForLoop, activeTags } from './renderRecipes.js';
 
 export function setupFilterSearch(type) {
     const searchInput = document.querySelector(`#${type}DropdownSearch`);
@@ -43,7 +43,7 @@ function handleTagSelection(type, value) {
         activeTags[type].push(value);
 
         addTag(type, value);
-        filterRecipes();
+        filterRecipesWithForLoop();
     }
 }
 
@@ -65,5 +65,5 @@ function addTag(type, value) {
 function removeTag(type, value, tagElement) {
     activeTags[type] = activeTags[type].filter(tag => tag !== value);
     tagElement.remove();
-    filterRecipes();
+    filterRecipesWithForLoop();
 }
